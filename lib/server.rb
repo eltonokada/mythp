@@ -6,7 +6,7 @@ puts "server listening on port 2911"
 loop do                      
   client = webserver.accept       
   begin
-    displayfile = File.open('www/sample/index.html', 'r')
+    displayfile = File.open('../www/sample/index.html', 'r')
     content = displayfile.read()
     client.print content
   rescue Errno::ENOENT
