@@ -1,16 +1,18 @@
 require 'socket'
+require 'mythp_response'
 
-webserver = TCPServer.new("127.0.0.1", 2911)
+webserver = TCPServer.new("localhost", 2911)
+config = "sample"
 puts "mythp listening on port 2911"
 
 loop do
-  session = webserver.accept  
-  request = session.gets     
-  request_path = request.split[1]
+  session = webserver.accept
+  mythp_response = MythpResponse.new(session, config)
+
   begin
-    session.print File.open("../www/sample#{request_path}", "r").read
+    mythp_response.output
   rescue Errno::ENOENT
     session.print("HTTP/1.1 404/Not Found\r\nContent-type: text/html\r\n\r\n")
   end
-  session.close                 
+  session.close
 end
